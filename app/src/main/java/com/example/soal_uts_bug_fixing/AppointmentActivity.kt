@@ -1,5 +1,6 @@
 package com.example.soal_uts_bug_fixing
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
@@ -27,6 +28,12 @@ class AppointmentActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
     private lateinit var binding: ActivityAppointmentBinding
 
     companion object{
+        //tegar, menambahkan companion object untuk nama,
+        // identitas, gender, dan keluhan
+        const val EXTRA_NAMA = "nama"
+        const val EXTRA_IDENTITAS = "identitas"
+        const val EXTRA_GENDER = "gender"
+        const val EXTRA_KELUHAN = "keluhan"
         const val EXTRA_TELEFON = "extra_phone"
         const val EXTRA_ALAMAT = "extra_alamat"
         const val EXTRA_TIPE = "extra_tipe"
@@ -49,17 +56,20 @@ class AppointmentActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
 
         with(binding){
 
-            tombolKalender.setOnClickListener {
+            //tegar, mengganti kalenderTxt
+            kalenderTxt.setOnClickListener {
                 val datePicker = DatePicker()
                 datePicker.show(supportFragmentManager, "datePicker")
             }
 
-            tombolJam.setOnClickListener {
+            //tegar, mengganti timerTxt
+            timerTxt.setOnClickListener {
                 val timePicker = TimePicker()
                 timePicker.show(supportFragmentManager, "timePicker")
             }
 
-            tombolSubmit.setOnClickListener {
+            //tegar, mengganti submit buton
+            submitBtn.setOnClickListener {
                 if(fieldNotEmpty()){
                     val dialog = DialogExit()
                     //
@@ -95,14 +105,16 @@ class AppointmentActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
         //
     }
 
+    @SuppressLint("DefaultLocale")
     override fun onTimeSet(p0: android.widget.TimePicker?, hour: Int, menit:Int) {
-        timeInput = String.format("%02d:%02d", hour, minute)
+        timeInput = String.format("%02d:%02d", hour, menit) //tegar, mengganti menjadi menit
         binding.timerTxt.text = timeInput
     }
 
 
 //  AKSI SETELAH KONFIRMASI DIALOG BOX
     override fun onDialogResult(result: Boolean) {
+        //tegar, menjadi tidak error, karena sudah di gunakan companion object
         val nama = intent.getStringExtra(FormActivity.EXTRA_NAMA)
         val identitas = intent.getStringExtra(FormActivity.EXTRA_IDENTITAS)
         val gender = intent.getStringExtra(FormActivity.EXTRA_GENDER)
@@ -111,8 +123,9 @@ class AppointmentActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
                 val intentToResult = Intent(this@AppointmentActivity, ResultActivity::class.java)
                 intentToResult.putExtra(EXTRA_TELEFON, binding.kontakEdt.text.toString())
                 intentToResult.putExtra(EXTRA_TANGGAL, binding.kalenderTxt.text.toString())
-                (EXTRA_WAKTU, binding.timerTxt.text.toString())
-                (EXTRA_TIPE, tipePertemuan)
+                //tegar, menambahkan intent to result
+                intentToResult.putExtra(EXTRA_WAKTU, binding.timerTxt.text.toString())
+                intentToResult.putExtra(EXTRA_TIPE, tipePertemuan)
 
                 intentToResult.putExtra(FormActivity.EXTRA_NAMA, nama)
                 intentToResult.putExtra(FormActivity.EXTRA_IDENTITAS, identitas)
@@ -148,9 +161,10 @@ class AppointmentActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
 class DatePicker: DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val calendar = Calendar.getInstance()
-        //
-        //
-        //
+        //tegar, menambhakn variabel year, month, day
+        val year = calendar.get(Calendar.YEAR)
+        val monthOfYear = calendar.get(Calendar.MONTH)
+        val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
         return DatePickerDialog(
             requireActivity(),
             activity as DatePickerDialog.OnDateSetListener,
